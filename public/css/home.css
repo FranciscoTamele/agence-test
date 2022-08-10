@@ -1,0 +1,68 @@
+.bg-light{
+    background: #89C6DB !important;
+}
+
+.menunav:hover{
+    border-radius: 5px;
+    background: #376C8C !important; ;
+}
+
+.active, .active .nav-link{
+    border-radius: 5px;
+    background: #376C8C !important; ;
+    color: #ffffff;
+}
+
+.menunav{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.menunav:hover a.nav-link{
+    color: #ffffff;
+}
+
+.menunav a.nav-link img{
+    margin-right: 10px
+}
+
+.show ul{
+    margin-top: 10px;
+}
+
+@media (min-width: 992px){
+    .navbar-expand-lg .navbar-collapse  ul{
+        margin-top: 0;
+    }
+}
+
+figure{
+    position: relative;
+}
+
+figure img{
+    width: 100%;
+}
+
+figure figcaption{
+    position: absolute;
+    width: 100%;
+    top: 40%;
+}
+
+figure figcaption span.main{
+    color: #121E26;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+figure figcaption span.main2{
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+body{
+    /*width: 100vw;*/
+    overflow-x: hidden;
+}
