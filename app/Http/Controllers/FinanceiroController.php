@@ -44,14 +44,9 @@ class FinanceiroController extends Controller
 
         $dados = $this->dadosDeRequisicaoConsultores();
 
-        return View('relatorio_consultores', [
-            'for' => 'consultor',
-            'meses' => $this->getMesesFaturas(),
-            'anos' => $this->getAnosFaturas(),
-            'relatorios'=> Desempenho::getDesempenho($dados['consultores'], $dados['inicio'], $dados['final']),
-            'consultores_clientes'=>$this->getConsultores()
-        ]);
-
+        header("Content-Type:application/json");
+        echo json_encode(Desempenho::getDesempenho($dados['consultores'], $dados['inicio'], $dados['final']),JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        exit;
     }
 
     public function consultoresPizzaDes(){

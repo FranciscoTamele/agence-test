@@ -119,7 +119,7 @@
             <div class="col-md-2">
                 <div class="estatistica-btn-container">
                     <div>
-                        <form id="form-rel" method="GET" action="{{$url_desempenho}}/relatorio?action=1">
+                        <form id="form-rel" method="GET" action="{{$url_desempenho}}/relatorio">
                             <input id="submitRel" type="button" value="Relatorio">
                         </form>
                         <form id="form-gra" method="GET" action="{{$url_desempenho}}/grafico">
@@ -200,14 +200,13 @@
                     e.preventDefault();
                     alert("Selecione os dados dos quais pretende buscar o relatorio.");
                 } else {
-                    if (consultores.length == 0) {
-                        e.preventDefault()
-                        alert("Selecione os dados dos quais pretende buscar o grafico.")
-                    } else {
 
-                        if(isClientInterface()){
+                            if(isClientInterface()){
+                                var action = $(form_gra).attr("action");
+                            }else{
+                                var action = $(form_rel).attr("action");
+                            }
 
-                            var action = $(form_gra).attr("action");
                             var params = "?";
 
                             for (i = 0; i < consultores.length; i++) {
@@ -223,7 +222,6 @@
 
                             params += datainicio;
                             params += datafim;
-
 
                             console.log(action+params);
                             $.ajax({
@@ -296,11 +294,19 @@
                                         $(table).append(tr);
 
                                         var div = document.getElementById('container-desempenho');
+                                        $(div).css({"height":"auto"});
                                         $(div).empty();
                                         $(div).append(table);
 
                                     }else{
 
+
+                                        var table = document.createElement('table');
+                                        $.each(result,function (index,objectJson){
+                                            $.each(objectJson,function (index,son){
+                                                console.log(index);
+                                            });
+                                        });
 
                                     }
 
@@ -310,17 +316,10 @@
                                 }
                             });
 
-                        }else{
-                            submitForm(consultores, form_rel);
-                        }
-
                     }
 
-                }
 
             });
-
-
 
             $("#submitGra").click(function (e) {
 
