@@ -29,6 +29,7 @@ class FinanceiroController extends Controller
     }
 
     // Consultores **********************************************************
+
     public function consultores()
     {
 
@@ -45,7 +46,7 @@ class FinanceiroController extends Controller
         $dados = $this->dadosDeRequisicaoConsultores();
 
         header("Content-Type:application/json");
-        echo json_encode(Desempenho::getDesempenho($dados['consultores'], $dados['inicio'], $dados['final']),JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+        echo json_encode(Desempenho::getDesempConsultoresGlobal($dados['consultores'], $dados['inicio'], $dados['final']),JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -53,7 +54,7 @@ class FinanceiroController extends Controller
 
         $dados = $this->dadosDeRequisicaoConsultores();
 
-        $desempenho = Desempenho::getDesempenho($dados['consultores'], $dados['inicio'], $dados['final']);
+        $desempenho = Desempenho::getDesempConsultoresGlobal($dados['consultores'], $dados['inicio'], $dados['final']);
 
         header('Content-Type:application/json');
         echo json_encode($desempenho,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -63,7 +64,7 @@ class FinanceiroController extends Controller
 
         $dados = $this->dadosDeRequisicaoConsultores();
 
-        $desempenho = Desempenho::getDesempenhoGraficoConsultores($dados['consultores'], $dados['inicio'], $dados['final']);
+        $desempenho = Desempenho::getDesempConsultoresSpecific($dados['consultores'], $dados['inicio'], $dados['final']);
 
 
         header('Content-Type:application/json');
@@ -71,8 +72,8 @@ class FinanceiroController extends Controller
         exit;
     }
 
-
     // Clientes **********************************************************
+
     public function clientes()
     {
 
@@ -89,7 +90,7 @@ class FinanceiroController extends Controller
         $dados = $this->dadosDeRequisicaoConsultores();
 
         header('Content-Type:application/json');
-        $dados = Desempenho::getDesempenhoClientes($dados['consultores'], $dados['inicio'], $dados['final']);
+        $dados = Desempenho::getDesempClientesSpecific($dados['consultores'], $dados['inicio'], $dados['final']);
         echo json_encode($dados,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
@@ -99,7 +100,7 @@ class FinanceiroController extends Controller
         $dados = $this->dadosDeRequisicaoConsultores();
 
         header('Content-Type:application/json');
-        $dados = Desempenho::getDesempenhoGrafico($dados['consultores'], $dados['inicio'], $dados['final']);
+        $dados = Desempenho::getDesempClientesGlobal($dados['consultores'], $dados['inicio'], $dados['final']);
         echo json_encode($dados,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
@@ -108,12 +109,17 @@ class FinanceiroController extends Controller
         $dados = $this->dadosDeRequisicaoConsultores();
 
         header('Content-Type:application/json');
-        $dados = Desempenho::getDesempenhoClientes($dados['consultores'], $dados['inicio'], $dados['final']);
+        $dados = Desempenho::getDesempClientesSpecific($dados['consultores'], $dados['inicio'], $dados['final']);
         echo json_encode($dados,JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
-    /**********************************************************************/
+    /********************************* Recurso para paginas *************************************/
+
+    /**
+     * Metodo responsavel em retornar meses que tem factura
+     * @return array
+     */
     private function getMesesFaturas(){
 
         $result = DB::select('select distinct(month(data_emissao)) as mes from cao_fatura order by month(data_emissao) asc');
@@ -160,7 +166,7 @@ class FinanceiroController extends Controller
     }
 
     /**
-     * Metodo responsavel em buscar os consultores
+     * Metodo responsavel em buscar os clientes tipo A
      * @return array[]
      */
     private function getClientes(){
@@ -181,6 +187,10 @@ class FinanceiroController extends Controller
 
     /***************************************************************************************************************/
 
+    /**
+     * Metodo responsavel em organizar os parametros para requisicao no banco de dados
+     * @return string[]
+     */
     public function dadosDeRequisicaoConsultores(){
 
         $urlParams = $_GET;

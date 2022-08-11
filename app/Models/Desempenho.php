@@ -12,7 +12,7 @@ class Desempenho extends Model
 
     /************************************************* Consultores *******************************************************/
 
-    public static function getDesempenho($consultores, $datainit, $dataend){
+    public static function getDesempConsultoresGlobal($consultores, $datainit, $dataend){
 
         // consulta ao banco de dados dos consultos, suas OS e  faturas
         $consultoresDes = DB::select("select us.co_usuario as codico, us.no_usuario as nome,os.co_os,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc
@@ -30,16 +30,81 @@ class Desempenho extends Model
             return (array)$value;
         }, $consultoresSal);
 
-        return self::gerarRelatorioConsultores($consultoresDes,$consultoresSal);
+        return self::calculoRelatorioTipo1($consultoresDes,$consultoresSal);
 
     }
 
+    public static function getDesempConsultoresSpecific($consultores, $datainit, $dataend){
+
+        // consulta ao banco de dados dos consultos, suas OS e  faturas
+        $consultoresDes = DB::select("select us.co_usuario as codico, us.no_usuario as nome, os.co_os,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc
+        from cao_os as os join cao_usuario as us on us.co_usuario = os.co_usuario and os.co_usuario in(".$consultores.")
+        join cao_fatura f on os.co_os = f.co_os and f.data_emissao >= '".$datainit."' and f.data_emissao <= '".$dataend."' order by f.data_emissao asc");
+
+        // consulta dos salarios
+        $consultoresSal = DB::select("select * from cao_salario where co_usuario in (".$consultores.")");
+
+        $consultoresDes = array_map(function ($value) {
+            return (array)$value;
+        }, $consultoresDes);
+
+        $consultoresSal = array_map(function ($value) {
+            return (array)$value;
+        }, $consultoresSal);
+
+        $total=0;
+        foreach ($consultoresSal as $consult){
+            $total+=$consult['brut_salario'];
+        }
+
+        $media = $total/sizeof($consultoresSal);
+
+        return [
+            "media_salario"=>$media,
+            "desempenho"=>self::gerarRelatorioTipo2($consultoresDes)
+        ];
+
+    }
+
+    /************************************************* Clientes *******************************************************/
+
+    public static function getDesempClientesGlobal($clientes, $datainit, $dataend){
+
+        // consulta ao banco de dados dos consultos, suas OS e  faturas
+        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$clientes.") and f.data_emissao >= '".$datainit."' and f.data_emissao < '".$dataend."' order by f.data_emissao asc");
+
+        $clientes = array_map(function ($value) {
+            return (array)$value;
+        }, $clientes);
+
+        return self::calculoRelatorioTipo1($clientes,null);
+
+    }
+
+    public static function getDesempClientesSpecific($consultores, $datainit, $dataend){
+
+        // consulta ao banco de dados dos consultos, suas OS e  faturas
+        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$consultores.") and f.data_emissao >='".$datainit."' and f.data_emissao <'".$dataend."' order by f.data_emissao asc");
+
+        $clientes = array_map(function ($value) {
+            return (array)$value;
+        }, $clientes);
+
+        return [
+            "desempenho"=>self::gerarRelatorioTipo2($clientes)
+        ];
+
+    }
+
+    /**********************************************************************************************************/
+
     /**
+     * O tipo de relatorio 1 retorna todos dados estatisticos, receita_liquida, comissao, custo_fixo e lucro e os seus totais mensais e global
      * @param $consultoresDes array consultos com suas respectivas O.S e faturas
      * @param $consultoresSal array dados salariais dos consultores
-     * @return array dados calculados : receita_liquida, comissao, custo_fixo e lucro
+     * @return array dados calculados
      */
-    private static function gerarRelatorioConsultores($consultoresDes, $consultoresSal=null){
+    private static function calculoRelatorioTipo1($consultoresDes, $consultoresSal=null){
 
         $desempenho=[];
 
@@ -134,43 +199,12 @@ class Desempenho extends Model
 
     }
 
-    public static function getDesempenhoGraficoConsultores($consultores, $datainit, $dataend){
-
-        // consulta ao banco de dados dos consultos, suas OS e  faturas
-        $consultoresDes = DB::select("select us.co_usuario as codico, us.no_usuario as nome, os.co_os,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc
-        from cao_os as os join cao_usuario as us on us.co_usuario = os.co_usuario and os.co_usuario in(".$consultores.")
-        join cao_fatura f on os.co_os = f.co_os and f.data_emissao >= '".$datainit."' and f.data_emissao <= '".$dataend."' order by f.data_emissao asc");
-
-        // consulta dos salarios
-        $consultoresSal = DB::select("select * from cao_salario where co_usuario in (".$consultores.")");
-
-        $consultoresDes = array_map(function ($value) {
-            return (array)$value;
-        }, $consultoresDes);
-
-        $consultoresSal = array_map(function ($value) {
-            return (array)$value;
-        }, $consultoresSal);
-
-        $total=0;
-        foreach ($consultoresSal as $consult){
-            $total+=$consult['brut_salario'];
-        }
-
-        $media = $total/sizeof($consultoresSal);
-
-        return [
-            "media_salario"=>$media,
-            "desempenho"=>self::gerarGraficoConsultores($consultoresDes)
-        ];
-
-    }
-
     /**
+     * O tipo de relatorio 2 retorna dados calculados : receita_liquida e os seu tal
      * @param $consultoresDes array consultos com suas respectivas O.S e faturas
      * @return array dados calculados : receita_liquida
      */
-    private static function gerarGraficoConsultores($consultoresDes){
+    private static function gerarRelatorioTipo2($consultoresDes){
 
         $datasFaturas = [];
         $i=0;
@@ -212,37 +246,5 @@ class Desempenho extends Model
         return $desempenho;
 
     }
-
-    /************************************************* Clientes *******************************************************/
-
-    public static function getDesempenhoGrafico($clientes, $datainit, $dataend){
-
-        // consulta ao banco de dados dos consultos, suas OS e  faturas
-        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$clientes.") and f.data_emissao >= '".$datainit."' and f.data_emissao < '".$dataend."' order by f.data_emissao asc");
-
-        $clientes = array_map(function ($value) {
-            return (array)$value;
-        }, $clientes);
-
-        return self::gerarRelatorioConsultores($clientes,null);
-
-    }
-
-    public static function getDesempenhoClientes($consultores, $datainit, $dataend){
-
-        // consulta ao banco de dados dos consultos, suas OS e  faturas
-        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$consultores.") and f.data_emissao >='".$datainit."' and f.data_emissao <'".$dataend."' order by f.data_emissao asc");
-
-        $clientes = array_map(function ($value) {
-            return (array)$value;
-        }, $clientes);
-
-        return [
-            "desempenho"=>self::gerarGraficoConsultores($clientes)
-        ];
-
-    }
-
-
 
 }
