@@ -223,11 +223,11 @@
                             params += datainicio;
                             params += datafim;
 
-                            console.log(action+params);
                             $.ajax({
                                 url: action + params,
                                 success: function (result) {
-
+                                    $("#container-desempenho").css({"height":"auto"});
+                                    $("#container-desempenho").empty();
                                     if(isClientInterface()){
 
                                         var dados = organizacaoDeDados(result);
@@ -300,12 +300,30 @@
 
                                     }else{
 
-
                                         var table = document.createElement('table');
                                         $.each(result,function (index,objectJson){
-                                            $.each(objectJson,function (index,son){
-                                                console.log(index);
+
+                                            var table = document.createElement('table');
+                                            $(table).append("<tr class='colored'> <td colspan='5' style='color: black;text-align: left;font-weight: bold'>"+objectJson['nome']+"</td> </tr>");
+                                            $(table).append("<tr class='colored total'> <td>Período</td> <td>Receita Líquida</td> <td>Custo Fixo</td> <td>Comissão</td> <td>Lucro</td> </tr>");
+
+                                            $.each(objectJson,function(indexj,json){
+                                                if(indexj!='nome' && indexj!='total_receita_liquida' && indexj!='total_custo_fixo' &&indexj!='total_lucro' &&indexj!='total_comissao'){
+                                                    var styleLucro="";
+                                                    if(parseInt(json['lucro'])<0){
+                                                        styleLucro="color:red";
+                                                    }
+                                                    $(table).append("<tr><td>"+indexj+"</td><td>"+moedaBrazil(json['rec_liquida'])+"</td><td>"+moedaBrazil(json['custo_fixo'])+"</td><td>"+moedaBrazil(json['comissao'])+"</td><td style="+styleLucro+">"+moedaBrazil(json['lucro'])+"</td></tr>");
+                                                }
                                             });
+
+                                            var styleLucro="";
+                                            if(parseInt(objectJson['total_lucro'])<0){
+                                                styleLucro="color:red";
+                                            }
+                                            $(table).append("<tr class='colored total'><td>Total</td><td>"+moedaBrazil(objectJson['total_receita_liquida'])+"</td><td>"+moedaBrazil(objectJson['total_custo_fixo'])+"</td><td>"+moedaBrazil(objectJson['total_comissao'])+"</td><td style='"+styleLucro+"'>"+moedaBrazil(objectJson['total_lucro'])+"</td></tr>");
+                                            $("#container-desempenho").append(table);
+                                            $("#container-desempenho").append("<br>");
                                         });
 
                                     }
@@ -320,6 +338,11 @@
 
 
             });
+
+
+            function moedaBrazil(n){
+                return n.toLocaleString('pt-BR', {currency: 'BRL', style: 'currency'})
+            }
 
             $("#submitGra").click(function (e) {
 
