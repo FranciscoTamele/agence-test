@@ -37,7 +37,7 @@ class Desempenho extends Model
     public static function getDesempConsultoresSpecific($consultores, $datainit, $dataend){
 
         // consulta ao banco de dados dos consultos, suas OS e  faturas
-        $consultoresDes = DB::select("select us.co_usuario as codico, us.no_usuario as nome, os.co_os,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc
+        $consultoresDes = DB::select("select us.co_usuario as codico, us.no_usuario as nome, os.co_os,f.co_fatura,f.valor,concat(month(f.data_emissao),'-',year(f.data_emissao)) as data_emissao,f.comissao_cn,f.total_imp_inc
         from cao_os as os join cao_usuario as us on us.co_usuario = os.co_usuario and os.co_usuario in(".$consultores.")
         join cao_fatura f on os.co_os = f.co_os and f.data_emissao >= '".$datainit."' and f.data_emissao <= '".$dataend."' order by f.data_emissao asc");
 
@@ -71,7 +71,7 @@ class Desempenho extends Model
     public static function getDesempClientesGlobal($clientes, $datainit, $dataend){
 
         // consulta ao banco de dados dos consultos, suas OS e  faturas
-        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$clientes.") and f.data_emissao >= '".$datainit."' and f.data_emissao < '".$dataend."' order by f.data_emissao asc");
+        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,concat(month(f.data_emissao),'-',year(f.data_emissao)) as data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$clientes.") and f.data_emissao >= '".$datainit."' and f.data_emissao < '".$dataend."' order by f.data_emissao asc");
 
         $clientes = array_map(function ($value) {
             return (array)$value;
@@ -84,7 +84,7 @@ class Desempenho extends Model
     public static function getDesempClientesSpecific($consultores, $datainit, $dataend){
 
         // consulta ao banco de dados dos consultos, suas OS e  faturas
-        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,f.data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$consultores.") and f.data_emissao >='".$datainit."' and f.data_emissao <'".$dataend."' order by f.data_emissao asc");
+        $clientes = DB::select("select f.co_cliente as codico,c.no_razao as nome,f.co_fatura,f.valor,concat(month(f.data_emissao),'-',year(f.data_emissao)) as data_emissao,f.comissao_cn,f.total_imp_inc from cao_fatura as f join cao_cliente as c on f.co_cliente = c.co_cliente and f.co_cliente in(".$consultores.") and f.data_emissao >='".$datainit."' and f.data_emissao <'".$dataend."' order by f.data_emissao asc");
 
         $clientes = array_map(function ($value) {
             return (array)$value;

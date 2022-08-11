@@ -199,7 +199,16 @@ $(document).ready(function () {
 
                     }
 
+                },
+                error: function (error){
+
+                    $("#container-desempenho").empty();
+                    $("#container-desempenho").css({"height":"auto"});
+                    $("#container-desempenho").append("<p style='color: red;font-size: 30px;text-align: center;margin-top: 50px;margin-bottom: 50px'>Ocorreu ao carregar os dados</p>");
+
+
                 }
+
             });
 
         }
@@ -295,6 +304,13 @@ $(document).ready(function () {
 
 
 
+                },
+                error: function (error){
+
+                    $("#container-desempenho").empty();
+                    $("#container-desempenho").css({"height":"auto"});
+                    $("#container-desempenho").append("<p style='color: red;font-size: 30px;text-align: center;margin-top: 50px;margin-bottom: 50px'>Ocorreu ao carregar os dados</p>");
+
                 }
             });
 
@@ -351,6 +367,14 @@ $(document).ready(function () {
                     var div = document.getElementById('container-desempenho');
                     $(div).empty();
                     Plotly.newPlot("container-desempenho", data, layout);
+
+                },
+                error: function (error){
+
+
+                    $("#container-desempenho").empty();
+                    $("#container-desempenho").css({"height":"auto"});
+                    $("#container-desempenho").append("<p style='color: red;font-size: 30px;text-align: center;margin-top: 50px;margin-bottom: 50px'>Ocorreu ao carregar os dados</p>");
 
                 }
             });
