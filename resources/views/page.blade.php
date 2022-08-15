@@ -7,7 +7,7 @@
         <title>@yield('title')</title>
 
         <!-- CSS only -->
-        <link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
         <link href="/css/home.css" rel="stylesheet">
         <link href="/css/relatorios.css" rel="stylesheet">
 
@@ -84,8 +84,8 @@
         </div>
 
     <!-- JavaScript Bundle with Popper -->
-        <script src="/js/jquery.slim.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        <script src="/js/jquery.slim.min.js" crossorigin="anonymous"></script>
+    <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
         @yield('scripts')
 

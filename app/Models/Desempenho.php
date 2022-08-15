@@ -114,7 +114,7 @@ class Desempenho extends Model
 
                 $imp=($fatura['total_imp_inc']/100*$fatura['valor']);
                 $receita = $fatura['valor'] - $imp;
-                $comissao = $fatura['valor'] - ($fatura['comissao_cn']/100*$imp);
+                $comissao =($fatura['comissao_cn']/100*$receita);
 
                 $data = date('m-Y',strtotime($fatura['data_emissao']));
 
@@ -138,7 +138,7 @@ class Desempenho extends Model
 
                 $imp=($fatura['total_imp_inc']/100*$fatura['valor']);
                 $receita = $fatura['valor'] - $imp;
-                $comissao = $fatura['valor'] - ($fatura['comissao_cn']/100*$imp);
+                $comissao = $fatura['comissao_cn']/100*$receita;
 
                 $data = date('m-Y',strtotime($fatura['data_emissao']));
 
