@@ -29,7 +29,6 @@ class FinanceiroController extends Controller
     }
 
     // Consultores **********************************************************
-
     public function consultores()
     {
 
