@@ -398,8 +398,7 @@ $(document).ready(function () {
 
             if ($(json).attr("value") != '') {
 
-
-                $(json).remove()
+                $(json).remove();
                 var opt = new Option();
                 opt.value = $(json).attr("value");
                 opt.text = $(json).text();
@@ -460,6 +459,7 @@ $(document).ready(function () {
     }
 
     function getMax(arr) {
+
         var max;
         for (var i = 0; i < arr.length; i++) {
             if (i != 0) {
@@ -469,6 +469,7 @@ $(document).ready(function () {
 
         }
         return max;
+
     }
 
 });
