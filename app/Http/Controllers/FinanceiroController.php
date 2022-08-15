@@ -37,7 +37,16 @@ class FinanceiroController extends Controller
             'for' => 'consultor',
             'meses' => $this->getMesesFaturas(),
             'anos' => $this->getAnosFaturas(),
-            'consultores_clientes'=>$this->getConsultores()
+            'consultores_clientes'=>$this->getConsultores(),
+            "menu"=>[
+                "home"=>"",
+                "projectos"=>"",
+                "administrativos"=>"",
+                "comercial"=>"",
+                "financeiro"=>"active",
+                "usuario"=>""
+            ]
+
         ]);
     }
 
@@ -81,7 +90,15 @@ class FinanceiroController extends Controller
             'for' => 'cliente',
             'meses' => $this->getMesesFaturas(),
             'anos' => $this->getAnosFaturas(),
-            'consultores_clientes'=>$this->getClientes()
+            'consultores_clientes'=>$this->getClientes(),
+            "menu"=>[
+                "home"=>"",
+                "projectos"=>"",
+                "administrativos"=>"",
+                "comercial"=>"",
+                "financeiro"=>"active",
+                "usuario"=>""
+            ]
         ]);
     }
 

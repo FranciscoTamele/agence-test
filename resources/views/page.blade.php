@@ -24,22 +24,22 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto me-3 mb-2 mb-lg-0">
-                                <li class="nav-item menunav active">
+                                <li class="nav-item menunav {{$menu['home']}}">
                                     <a class="nav-link" href="/"><img src="/icon/menu/agence.gif" style="">Agence</a>
                                 </li>
-                                <li class="nav-item menunav">
+                                <li class="nav-item menunav {{$menu['projectos']}}">
                                     <a class="nav-link" href="#"><img src="/icon/task_icon.gif">projectos</a>
                                 </li>
-                                <li class="nav-item menunav">
+                                <li class="nav-item menunav {{$menu['administrativos']}}">
                                     <a class="nav-link" href="#"><img src="/icon/menu/administrativo.gif" >Administrativos</a>
                                 </li>
-                                <li class="nav-item menunav">
+                                <li class="nav-item menunav {{$menu['comercial']}}">
                                     <a class="nav-link" href="#"><img src="/icon/menu/comercial.gif">Comercial</a>
                                 </li>
-                                <li class="nav-item menunav">
+                                <li class="nav-item menunav {{$menu['financeiro']}}">
                                     <a class="nav-link" href="/financeiros"><img src="/icon/menu/financeiro.gif">Financeiro</a>
                                 </li>
-                                <li class="nav-item menunav">
+                                <li class="nav-item menunav {{$menu['usuario']}}">
                                     <a class="nav-link" href="#"><img src="/icon/menu/usuario.gif">Usuario</a>
                                 </li>
                                 <li class="nav-item menunav">

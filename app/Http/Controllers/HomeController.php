@@ -8,7 +8,16 @@ class HomeController extends Controller
 {
     //
     public function index(){
-        return View('home');
+        return View('home',[
+            "menu"=>[
+                "home"=>"active",
+                "projectos"=>"",
+                "administrativos"=>"",
+                "comercial"=>"",
+                "financeiro"=>"",
+                "usuario"=>""
+            ]
+        ]);
     }
 
 }
